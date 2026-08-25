@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "module": "CommonJS",
+    "moduleResolution": "Node10",
+
+    // CommonJS output cannot keep the ESM import syntax verbatim, so this one
+    // flag has to be off for the second build. Sources still use `import type`.
+    "verbatimModuleSyntax": false,
+
+    "noEmit": false,
+    "outDir": "dist/cjs",
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true
+  },
+  "include": ["src"]
+}
