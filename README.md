@@ -10,10 +10,8 @@ Nothing content-shaped is ever sent - no message text, no command options.
 
 ## Install
 
-Not on npm yet. Install from the repository:
-
 ```bash
-npm install github:top-stats/analytics-discord-integration
+npm install @topstats/discord
 ```
 
 ## Quick start
