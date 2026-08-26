@@ -1,0 +1,43 @@
+name: Publish
+
+# Publishes to npm via OIDC trusted publishing - no token anywhere. One-time
+# setup on npmjs.com: package Settings -> Trusted publisher -> this repo +
+# "publish.yml". Runs on every GitHub Release, or by hand.
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '22'
+          registry-url: https://registry.npmjs.org
+
+      # Trusted publishing needs npm 11.5+.
+      - name: Update npm
+        run: npm install -g npm@latest
+
+      - name: Install
+        run: npm ci
+
+      - name: Publish if this version is not on npm yet
+        run: |
+          name=$(node -p "require('./package.json').name")
+          version=$(node -p "require('./package.json').version")
+          if npm view "$name@$version" version >/dev/null 2>&1; then
+            echo "$name@$version already published; nothing to do."
+          else
+            npm publish
+          fi
